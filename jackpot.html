@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE JACKPOT</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#000;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* 상단 네비 */
+.navbar{
+    width:100%;
+    height:90px;
+    background:#010c2b;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    border-bottom:2px solid #1f2b55;
+}
+
+.menu,
+.profile{
+    font-size:42px;
+    cursor:pointer;
+}
+
+.logo{
+    text-align:center;
+}
+
+.logo-title{
+    font-size:42px;
+    font-weight:bold;
+}
+
+.logo-sub{
+    font-size:14px;
+    color:#ccc;
+    letter-spacing:2px;
+}
+
+/* 광고 배너 */
+.top-banner{
+    width:100%;
+    height:260px;
+    position:relative;
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        90deg,
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.2)
+    ),
+    url("https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1600&auto=format&fit=crop")
+    center/cover;
+}
+
+.banner-overlay{
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(
+        circle at right,
+        rgba(255,140,0,0.45),
+        transparent 40%
+    );
+}
+
+.banner-content{
+    position:relative;
+    z-index:2;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-left:60px;
+}
+
+.banner-small{
+    font-size:22px;
+    color:#ffcb6d;
+    margin-bottom:10px;
+}
+
+.banner-big{
+    font-size:72px;
+    font-weight:bold;
+    text-shadow:
+        0 0 10px rgba(255,255,255,0.4),
+        0 0 25px rgba(255,180,0,0.5);
+}
+
+.banner-sub{
+    margin-top:10px;
+    font-size:26px;
+    color:#ddd;
+}
+
+/* 잭팟 */
+.jackpot-bar{
+    width:100%;
+    background:
+    linear-gradient(
+        180deg,
+        #7522a9,
+        #4a146f
+    );
+    border-top:5px solid #d79a00;
+    border-bottom:5px solid #d79a00;
+    padding:20px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.jackpot-title{
+    font-size:26px;
+    font-weight:bold;
+    color:white;
+}
+
+.jackpot-amount{
+    margin-top:10px;
+    font-size:90px;
+    font-weight:bold;
+    color:#ffd400;
+    text-shadow:
+        0 0 15px rgba(255,212,0,0.8),
+        0 0 35px rgba(255,212,0,0.5);
+}
+
+/* 메인 */
+.container{
+    padding:30px;
+}
+
+/* 슬롯 카드 */
+.slot-card{
+    width:100%;
+    background:
+    linear-gradient(
+        180deg,
+        #171717,
+        #050505
+    );
+    border:2px solid #6e4b00;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 0 30px rgba(255,180,0,0.15);
+}
+
+/* 슬롯 상단 */
+.slot-header{
+    padding:20px;
+    background:
+    linear-gradient(
+        90deg,
+        #161616,
+        #2b1c00
+    );
+    border-bottom:2px solid #6e4b00;
+}
+
+.provider{
+    font-size:48px;
+    font-weight:bold;
+}
+
+.provider-sub{
+    margin-top:5px;
+    color:#bbb;
+}
+
+/* 슬롯 본문 */
+.slot-body{
+    padding:40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+/* 슬롯 */
+.slots{
+    display:flex;
+    gap:20px;
+}
+
+.slot{
+    width:170px;
+    height:170px;
+    background:
+    linear-gradient(
+        180deg,
+        #0c0c0c,
+        #232323
+    );
+    border:4px solid #d79a00;
+    border-radius:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:90px;
+
+    box-shadow:
+        0 0 25px rgba(255,190,0,0.35),
+        inset 0 0 20px rgba(255,255,255,0.08);
+}
+
+/* 버튼 */
+.spin-btn{
+    margin-top:35px;
+    padding:18px 65px;
+    background:
+    linear-gradient(
+        90deg,
+        #ffb300,
+        #ff6a00
+    );
+    border:none;
+    border-radius:12px;
+    font-size:30px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+
+    box-shadow:
+        0 0 20px rgba(255,140,0,0.6);
+
+    transition:0.2s;
+}
+
+.spin-btn:hover{
+    transform:scale(1.05);
+}
+
+/* 결과 */
+.result{
+    margin-top:25px;
+    min-height:50px;
+    font-size:36px;
+    color:#4dff9c;
+    text-shadow:0 0 12px #00ff84;
+}
+
+.jackpot{
+    animation:flash 0.3s infinite alternate;
+}
+
+@keyframes flash{
+    from{
+        transform:scale(1);
+    }
+    to{
+        transform:scale(1.08);
+    }
+}
+
+/* 최근 결과 */
+.recent{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.recent-card{
+    background:#121212;
+    border:2px solid #333;
+    border-radius:10px;
+    padding:20px;
+}
+
+.recent-title{
+    font-size:24px;
+    margin-bottom:15px;
+    color:#ffcf5c;
+}
+
+.recent-icons{
+    display:flex;
+    gap:10px;
+    font-size:36px;
+}
+
+/* 하단 광고 */
+.footer-ad{
+    margin-top:40px;
+    width:100%;
+    background:
+    linear-gradient(
+        90deg,
+        #0f0f0f,
+        #2b1800
+    );
+    border-top:3px solid #d79a00;
+    padding:30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.footer-left{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.footer-right{
+    text-align:right;
+}
+
+.live{
+    color:#00ff88;
+    margin-bottom:10px;
+}
+
+.clock{
+    font-size:52px;
+    color:#00ff88;
+    font-family:monospace;
+}
+</style>
+</head>
+<body>
+
+<!-- 상단 -->
+<div class="navbar">
+
+    <div class="menu">☰</div>
+
+    <div class="logo">
+        <div class="logo-title">EZ CASINO</div>
+        <div class="logo-sub">
+            LIVE CASINO & SLOT GAMES
+        </div>
+    </div>
+
+    <div class="profile">◉</div>
+
+</div>
+
+<!-- 광고 -->
+<div class="top-banner">
+
+    <div class="banner-overlay"></div>
+
+    <div class="banner-content">
+
+        <div class="banner-small">
+            JACKPOT EVENT OPEN
+        </div>
+
+        <div class="banner-big">
+            MEGA SLOT BONUS
+        </div>
+
+        <div class="banner-sub">
+            REALTIME JACKPOT SYSTEM
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 잭팟 -->
+<div class="jackpot-bar">
+
+    <div class="jackpot-title">
+        PROGRESSIVE JACKPOT
+    </div>
+
+    <div class="jackpot-amount" id="money">
+        14,059,958.95
+    </div>
+
+</div>
+
+<!-- 메인 -->
+<div class="container">
+
+    <div class="slot-card">
+
+        <div class="slot-header">
+
+            <div class="provider">
+                EVOLUTION GAMING
+            </div>
+
+            <div class="provider-sub">
+                PREMIUM LIVE SLOT
+            </div>
+
+        </div>
+
+        <div class="slot-body">
+
+            <div class="slots">
+
+                <div class="slot" id="s1">💎</div>
+                <div class="slot" id="s2">7️⃣</div>
+                <div class="slot" id="s3">🍒</div>
+
+            </div>
+
+            <button class="spin-btn" onclick="spin()">
+                SPIN
+            </button>
+
+            <div class="result" id="result"></div>
+
+        </div>
+
+    </div>
+
+    <!-- 최근 -->
+    <div class="recent">
+
+        <div class="recent-card">
+            <div class="recent-title">ROUND 203</div>
+
+            <div class="recent-icons">
+                💎 💎 💎
+            </div>
+        </div>
+
+        <div class="recent-card">
+            <div class="recent-title">ROUND 202</div>
+
+            <div class="recent-icons">
+                🍒 7️⃣ 💎
+            </div>
+        </div>
+
+        <div class="recent-card">
+            <div class="recent-title">ROUND 201</div>
+
+            <div class="recent-icons">
+                🍀 🍀 🔥
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 하단 광고 -->
+<div class="footer-ad">
+
+    <div class="footer-left">
+        LIVE JACKPOT SERVER
+    </div>
+
+    <div class="footer-right">
+
+        <div class="live">
+            SYSTEM ONLINE
+        </div>
+
+        <div class="clock" id="clock">
+            00:00:00
+        </div>
+
+    </div>
+
+</div>
+<script src="jackpot.js"></script>
+</body>
+</html>
